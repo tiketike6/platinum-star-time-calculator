@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="color-scheme" content="light dark" />
+        <meta name="viewport" content="width=device-width" />
+        <link href="src/stylesheet.css" rel="stylesheet" />
+        <title>プラチナスタータイム計算機</title>
+    </head>
+
+    <body>
+        <table>
+            <tr>
+                <td>【開催日時】</td>
+                <td>
+                    <input type="datetime-local" id="start" /> ～ <input type="datetime-local" id="end" /> (折り返し：
+                    <input type="datetime-local" id="halfway" /> )
+                </td>
+            </tr>
+            <tr>
+                <td>【最終目標】</td>
+                <td><input type="number" id="target" style="width: 6em" /> pt <span id="diffTarget"> </span></td>
+            </tr>
+            <tr>
+                <td>【表示日時】</td>
+                <td>
+                    <input type="datetime-local" id="now" /> <label for="isNow"> <input type="checkbox" id="isNow" /> 現在日時 </label>
+                </td>
+            </tr>
+            <tr>
+                <td id="todaysLabel">【今日の目標】</td>
+                <td id="todaysTarget"></td>
+            </tr>
+            <tr>
+                <td id="nowLabel">【現在の目標】</td>
+                <td id="nowTarget"></td>
+            </tr>
+            <tr>
+                <td>【元気】</td>
+                <td><input type="number" id="stamina" style="width: 4em" /></td>
+            </tr>
+            <tr>
+                <td>【累積イベントpt】</td>
+                <td><input type="number" id="myPoint" style="width: 6em" /> pt</td>
+            </tr>
+            <tr>
+                <td>【イベントゲージ】</td>
+                <td><input type="number" id="gauge" style="width: 4em" /> %</td>
+            </tr>
+            <tr>
+                <td>【SPイベントステージ】</td>
+                <td>
+                    本日あと
+                    <input type="number" id="spStage" style="width: 2em" /> 回 <span id="remainingSpStage"> </span>
+                </td>
+            </tr>
+            <tr>
+                <td>【ミッション】</td>
+                <td>
+                    イベント楽曲：あと <input type="number" id="mission" style="width: 3em" /> 回<br />イベントステージ：あと
+                    <input type="number" id="missionStage" style="width: 3em" /> 回
+                </td>
+            </tr>
+            <tr>
+                <td>【表示コース】</td>
+                <td>
+                    <label for="showCourse-_2m_live3">
+                        <input type="checkbox" name="showCourse" id="showCourse-_2m_live3" value="_2m_live3" /> 2M ライブ3回
+                    </label>
+                    <label for="showCourse-_2m_live2">
+                        <input type="checkbox" name="showCourse" id="showCourse-_2m_live2" value="_2m_live2" /> 2M ライブ2回 お仕事1回
+                    </label>
+                    <label for="showCourse-_2m_live">
+                        <input type="checkbox" name="showCourse" id="showCourse-_2m_live" value="_2m_live" /> 2M ライブ1回 お仕事2回
+                    </label>
+                    <label for="showCourse-_2m_work">
+                        <input type="checkbox" name="showCourse" id="showCourse-_2m_work" value="_2m_work" /> 2M お仕事3回
+                    </label>
+                    <br />
+                    <label for="showCourse-_4m_live3">
+                        <input type="checkbox" name="showCourse" id="showCourse-_4m_live3" value="_4m_live3" /> 4M ライブ3回
+                    </label>
+                    <label for="showCourse-_4m_live2">
+                        <input type="checkbox" name="showCourse" id="showCourse-_4m_live2" value="_4m_live2" /> 4M ライブ2回 お仕事1回
+                    </label>
+                    <label for="showCourse-_4m_live">
+                        <input type="checkbox" name="showCourse" id="showCourse-_4m_live" value="_4m_live" /> 4M ライブ1回 お仕事2回
+                    </label>
+                    <label for="showCourse-_4m_work">
+                        <input type="checkbox" name="showCourse" id="showCourse-_4m_work" value="_4m_work" /> 4M お仕事3回
+                    </label>
+                    <br />
+                    <label for="showCourse-_6m_live3">
+                        <input type="checkbox" name="showCourse" id="showCourse-_6m_live3" value="_6m_live3" /> 6M/2M+ ライブ3回
+                    </label>
+                    <label for="showCourse-_6m_live2">
+                        <input type="checkbox" name="showCourse" id="showCourse-_6m_live2" value="_6m_live2" /> 6M/2M+ ライブ2回 お仕事1回
+                    </label>
+                    <label for="showCourse-_6m_live">
+                        <input type="checkbox" name="showCourse" id="showCourse-_6m_live" value="_6m_live" /> 6M/2M+ ライブ1回 お仕事2回
+                    </label>
+                    <label for="showCourse-_6m_work">
+                        <input type="checkbox" name="showCourse" id="showCourse-_6m_work" value="_6m_work" /> 6M/2M+ お仕事3回
+                    </label>
+                    <br />
+                    <label for="showCourse-_mm_live3">
+                        <input type="checkbox" name="showCourse" id="showCourse-_mm_live3" value="_mm_live3" /> MM ライブ3回
+                    </label>
+                    <label for="showCourse-_mm_live2">
+                        <input type="checkbox" name="showCourse" id="showCourse-_mm_live2" value="_mm_live2" /> MM ライブ2回 お仕事1回
+                    </label>
+                    <label for="showCourse-_mm_live">
+                        <input type="checkbox" name="showCourse" id="showCourse-_mm_live" value="_mm_live" /> MM ライブ1回 お仕事2回
+                    </label>
+                    <label for="showCourse-_mm_work">
+                        <input type="checkbox" name="showCourse" id="showCourse-_mm_work" value="_mm_work" /> MM お仕事3回
+                    </label>
+                    <label for="showCourse-all"> <input type="checkbox" id="showCourse-all" value="all" /> すべて </label>
+                </td>
+            </tr>
+        </table>
+        <table class="solid">
+            <tr>
+                <td rowspan="2"></td>
+                <td class="_2m _2m_header" colspan="4">2M</td>
+                <td class="_4m _4m_header" colspan="4">4M</td>
+                <td class="_6m _6m_header" colspan="4">6M / 2M+</td>
+                <td class="_mm _mm_header" colspan="4">MM</td>
+            </tr>
+            <tr>
+                <td class="_2m _2m_live3">ライブ 3回</td>
+                <td class="_2m _2m_live2">
+                    ライブ 2回 <br />
+                    お仕事 1回
+                </td>
+                <td class="_2m _2m_live">
+                    ライブ 1回 <br />
+                    お仕事 2回
+                </td>
+                <td class="_2m _2m_work">お仕事 3回</td>
+                <td class="_4m _4m_live3">ライブ 3回</td>
+                <td class="_4m _4m_live2">
+                    ライブ 2回 <br />
+                    お仕事 1回
+                </td>
+                <td class="_4m _4m_live">
+                    ライブ 1回 <br />
+                    お仕事 2回
+                </td>
+                <td class="_4m _4m_work">お仕事 3回</td>
+                <td class="_6m _6m_live3">ライブ 3回</td>
+                <td class="_6m _6m_live2">
+                    ライブ 2回 <br />
+                    お仕事 1回
+                </td>
+                <td class="_6m _6m_live">
+                    ライブ 1回 <br />
+                    お仕事 2回
+                </td>
+                <td class="_6m _6m_work">お仕事 3回</td>
+                <td class="_mm _mm_live3">ライブ 3回</td>
+                <td class="_mm _mm_live2">
+                    ライブ 2回 <br />
+                    お仕事 1回
+                </td>
+                <td class="_mm _mm_live">
+                    ライブ 1回 <br />
+                    お仕事 2回
+                </td>
+                <td class="_mm _mm_work">お仕事 3回</td>
+            </tr>
+            <tr class="stripe">
+                <td>SPイベントステージ回数</td>
+                <td class="_2m _2m_live3">
+                    <button class="beforePlay beforePlaySpStage" value="_2m_live3">◀</button>
+                    <div class="times" id="spStageTimes_2m_live3"></div>
+                    <button class="afterPlay afterPlaySpStage" value="_2m_live3">▶</button>
+                </td>
+                <td class="_2m _2m_live2">
+                    <button class="beforePlay beforePlaySpStage" value="_2m_live2">◀</button>
+                    <div class="times" id="spStageTimes_2m_live2"></div>
+                    <button class="afterPlay afterPlaySpStage" value="_2m_live2">▶</button>
+                </td>
+                <td class="_2m _2m_live">
+                    <button class="beforePlay beforePlaySpStage" value="_2m_live">◀</button>
+                    <div class="times" id="spStageTimes_2m_live"></div>
+                    <button class="afterPlay afterPlaySpStage" value="_2m_live">▶</button>
+                </td>
+                <td class="_2m _2m_work">
+                    <button class="beforePlay beforePlaySpStage" value="_2m_work">◀</button>
+                    <div class="times" id="spStageTimes_2m_work"></div>
+                    <button class="afterPlay afterPlaySpStage" value="_2m_work">▶</button>
+                </td>
+                <td class="_4m _4m_live3">
+                    <button class="beforePlay beforePlaySpStage" value="_4m_live3">◀</button>
+                    <div class="times" id="spStageTimes_4m_live3"></div>
+                    <button class="afterPlay afterPlaySpStage" value="_4m_live3">▶</button>
+                </td>
+                <td class="_4m _4m_live2">
+                    <button class="beforePlay beforePlaySpStage" value="_4m_live2">◀</button>
+                    <div class="times" id="spStageTimes_4m_live2"></div>
+                    <button class="afterPlay afterPlaySpStage" value="_4m_live2">▶</button>
+                </td>
+                <td class="_4m _4m_live">
+                    <button class="beforePlay beforePlaySpStage" value="_4m_live">◀</button>
+                    <div class="times" id="spStageTimes_4m_live"></div>
+                    <button class="afterPlay afterPlaySpStage" value="_4m_live">▶</button>
+                </td>
+                <td class="_4m _4m_work">
+                    <button class="beforePlay beforePlaySpStage" value="_4m_work">◀</button>
+                    <div class="times" id="spStageTimes_4m_work"></div>
+                    <button class="afterPlay afterPlaySpStage" value="_4m_work">▶</button>
+                </td>
+                <td class="_6m _6m_live3">
+                    <button class="beforePlay beforePlaySpStage" value="_6m_live3">◀</button>
+                    <div class="times" id="spStageTimes_6m_live3"></div>
+                    <button class="afterPlay afterPlaySpStage" value="_6m_live3">▶</button>
+                </td>
+                <td class="_6m _6m_live2">
+                    <button class="beforePlay beforePlaySpStage" value="_6m_live2">◀</button>
+                    <div class="times" id="spStageTimes_6m_live2"></div>
+                    <button class="afterPlay afterPlaySpStage" value="_6m_live2">▶</button>
+                </td>
+                <td class="_6m _6m_live">
+                    <button class="beforePlay beforePlaySpStage" value="_6m_live">◀</button>
+                    <div class="times" id="spStageTimes_6m_live"></div>
+                    <button class="afterPlay afterPlaySpStage" value="_6m_live">▶</button>
+                </td>
+                <td class="_6m _6m_work">
+                    <button class="beforePlay beforePlaySpStage" value="_6m_work">◀</button>
+                    <div class="times" id="spStageTimes_6m_work"></div>
+                    <button class="afterPlay afterPlaySpStage" value="_6m_work">▶</button>
+                </td>
+                <td class="_mm _mm_live3">
+                    <button class="beforePlay beforePlaySpStage" value="_mm_live3">◀</button>
+                    <div class="times" id="spStageTimes_mm_live3"></div>
+                    <button class="afterPlay afterPlaySpStage" value="_mm_live3">▶</button>
+                </td>
+                <td class="_mm _mm_live2">
+                    <button class="beforePlay beforePlaySpStage" value="_mm_live2">◀</button>
+                    <div class="times" id="spStageTimes_mm_live2"></div>
+                    <button class="afterPlay afterPlaySpStage" value="_mm_live2">▶</button>
+                </td>
+                <td class="_mm _mm_live">
+                    <button class="beforePlay beforePlaySpStage" value="_mm_live">◀</button>
+                    <div class="times" id="spStageTimes_mm_live"></div>
+                    <button class="afterPlay afterPlaySpStage" value="_mm_live">▶</button>
+                </td>
+                <td class="_mm _mm_work">
+                    <button class="beforePlay beforePlaySpStage" value="_mm_work">◀</button>
+                    <div class="times" id="spStageTimes_mm_work"></div>
+                    <button class="afterPlay afterPlaySpStage" value="_mm_work">▶</button>
+                </td>
+            </tr>
+            <tr class="stripe">
+                <td>SPイベントステージ獲得pt</td>
+                <td class="_2m _2m_live3" id="spStageEarnedPoints_2m_live3"></td>
+                <td class="_2m _2m_live2" id="spStageEarnedPoints_2m_live2"></td>
+                <td class="_2m _2m_live" id="spStageEarnedPoints_2m_live"></td>
+                <td class="_2m _2m_work" id="spStageEarnedPoints_2m_work"></td>
+                <td class="_4m _4m_live3" id="spStageEarnedPoints_4m_live3"></td>
+                <td class="_4m _4m_live2" id="spStageEarnedPoints_4m_live2"></td>
+                <td class="_4m _4m_live" id="spStageEarnedPoints_4m_live"></td>
+                <td class="_4m _4m_work" id="spStageEarnedPoints_4m_work"></td>
+                <td class="_6m _6m_live3" id="spStageEarnedPoints_6m_live3"></td>
+                <td class="_6m _6m_live2" id="spStageEarnedPoints_6m_live2"></td>
+                <td class="_6m _6m_live" id="spStageEarnedPoints_6m_live"></td>
+                <td class="_6m _6m_work" id="spStageEarnedPoints_6m_work"></td>
+                <td class="_mm _mm_live3" id="spStageEarnedPoints_mm_live3"></td>
+                <td class="_mm _mm_live2" id="spStageEarnedPoints_mm_live2"></td>
+                <td class="_mm _mm_live" id="spStageEarnedPoints_mm_live"></td>
+                <td class="_mm _mm_work" id="spStageEarnedPoints_mm_work"></td>
+            </tr>
+            <tr>
+                <td>プロモーション活動回数</td>
+                <td class="_2m _2m_live3">
+                    <button class="beforePlay beforePlayPromotion" value="_2m_live3">◀</button>
+                    <div class="times" id="promotionTimes_2m_live3"></div>
+                    <button class="afterPlay afterPlayPromotion" value="_2m_live3">▶</button>
+                </td>
+                <td class="_2m _2m_live2">
+                    <button class="beforePlay beforePlayPromotion" value="_2m_live2">◀</button>
+                    <div class="times" id="promotionTimes_2m_live2"></div>
+                    <button class="afterPlay afterPlayPromotion" value="_2m_live2">▶</button>
+                </td>
+                <td class="_2m _2m_live">
+                    <button class="beforePlay beforePlayPromotion" value="_2m_live">◀</button>
+                    <div class="times" id="promotionTimes_2m_live"></div>
+                    <button class="afterPlay afterPlayPromotion" value="_2m_live">▶</button>
+                </td>
+                <td class="_2m _2m_work">
+                    <button class="beforePlay beforePlayPromotion" value="_2m_work">◀</button>
+                    <div class="times" id="promotionTimes_2m_work"></div>
+                    <button class="afterPlay afterPlayPromotion" value="_2m_work">▶</button>
+                </td>
+                <td class="_4m _4m_live3">
+                    <button class="beforePlay beforePlayPromotion" value="_4m_live3">◀</button>
+                    <div class="times" id="promotionTimes_4m_live3"></div>
+                    <button class="afterPlay afterPlayPromotion" value="_4m_live3">▶</button>
+                </td>
+                <td class="_4m _4m_live2">
+                    <button class="beforePlay beforePlayPromotion" value="_4m_live2">◀</button>
+                    <div class="times" id="promotionTimes_4m_live2"></div>
+                    <button class="afterPlay afterPlayPromotion" value="_4m_live2">▶</button>
+                </td>
+                <td class="_4m _4m_live">
+                    <button class="beforePlay beforePlayPromotion" value="_4m_live">◀</button>
+                    <div class="times" id="promotionTimes_4m_live"></div>
+                    <button class="afterPlay afterPlayPromotion" value="_4m_live">▶</button>
+                </td>
+                <td class="_4m _4m_work">
+                    <button class="beforePlay beforePlayPromotion" value="_4m_work">◀</button>
+                    <div class="times" id="promotionTimes_4m_work"></div>
+                    <button class="afterPlay afterPlayPromotion" value="_4m_work">▶</button>
+                </td>
+                <td class="_6m _6m_live3">
+                    <button class="beforePlay beforePlayPromotion" value="_6m_live3">◀</button>
+                    <div class="times" id="promotionTimes_6m_live3"></div>
+                    <button class="afterPlay afterPlayPromotion" value="_6m_live3">▶</button>
+                </td>
+                <td class="_6m _6m_live2">
+                    <button class="beforePlay beforePlayPromotion" value="_6m_live2">◀</button>
+                    <div class="times" id="promotionTimes_6m_live2"></div>
+                    <button class="afterPlay afterPlayPromotion" value="_6m_live2">▶</button>
+                </td>
+                <td class="_6m _6m_live">
+                    <button class="beforePlay beforePlayPromotion" value="_6m_live">◀</button>
+                    <div class="times" id="promotionTimes_6m_live"></div>
+                    <button class="afterPlay afterPlayPromotion" value="_6m_live">▶</button>
+                </td>
+                <td class="_6m _6m_work">
+                    <button class="beforePlay beforePlayPromotion" value="_6m_work">◀</button>
+                    <div class="times" id="promotionTimes_6m_work"></div>
+                    <button class="afterPlay afterPlayPromotion" value="_6m_work">▶</button>
+                </td>
+                <td class="_mm _mm_live3">
+                    <button class="beforePlay beforePlayPromotion" value="_mm_live3">◀</button>
+                    <div class="times" id="promotionTimes_mm_live3"></div>
+                    <button class="afterPlay afterPlayPromotion" value="_mm_live3">▶</button>
+                </td>
+                <td class="_mm _mm_live2">
+                    <button class="beforePlay beforePlayPromotion" value="_mm_live2">◀</button>
+                    <div class="times" id="promotionTimes_mm_live2"></div>
+                    <button class="afterPlay afterPlayPromotion" value="_mm_live2">▶</button>
+                </td>
+                <td class="_mm _mm_live">
+                    <button class="beforePlay beforePlayPromotion" value="_mm_live">◀</button>
+                    <div class="times" id="promotionTimes_mm_live"></div>
+                    <button class="afterPlay afterPlayPromotion" value="_mm_live">▶</button>
+                </td>
+                <td class="_mm _mm_work">
+                    <button class="beforePlay beforePlayPromotion" value="_mm_work">◀</button>
+                    <div class="times" id="promotionTimes_mm_work"></div>
+                    <button class="afterPlay afterPlayPromotion" value="_mm_work">▶</button>
+                </td>
+            </tr>
+            <tr>
+                <td>プロモーション活動獲得pt</td>
+                <td class="_2m _2m_live3" id="promotionEarnedPoint_2m_live3"></td>
+                <td class="_2m _2m_live2" id="promotionEarnedPoint_2m_live2"></td>
+                <td class="_2m _2m_live" id="promotionEarnedPoint_2m_live"></td>
+                <td class="_2m _2m_work" id="promotionEarnedPoint_2m_work"></td>
+                <td class="_4m _4m_live3" id="promotionEarnedPoint_4m_live3"></td>
+                <td class="_4m _4m_live2" id="promotionEarnedPoint_4m_live2"></td>
+                <td class="_4m _4m_live" id="promotionEarnedPoint_4m_live"></td>
+                <td class="_4m _4m_work" id="promotionEarnedPoint_4m_work"></td>
+                <td class="_6m _6m_live3" id="promotionEarnedPoint_6m_live3"></td>
+                <td class="_6m _6m_live2" id="promotionEarnedPoint_6m_live2"></td>
+                <td class="_6m _6m_live" id="promotionEarnedPoint_6m_live"></td>
+                <td class="_6m _6m_work" id="promotionEarnedPoint_6m_work"></td>
+                <td class="_mm _mm_live3" id="promotionEarnedPoint_mm_live3"></td>
+                <td class="_mm _mm_live2" id="promotionEarnedPoint_mm_live2"></td>
+                <td class="_mm _mm_live" id="promotionEarnedPoint_mm_live"></td>
+                <td class="_mm _mm_work" id="promotionEarnedPoint_mm_work"></td>
+            </tr>
+            <tr class="stripe">
+                <td>イベントステージ回数</td>
+                <td class="_2m _2m_live3">
+                    <button class="beforePlay beforePlayEvent" value="_2m_live3">◀</button>
+                    <div class="times" id="eventTimes_2m_live3"></div>
+                    <button class="afterPlay afterPlayEvent" value="_2m_live3">▶</button>
+                </td>
+                <td class="_2m _2m_live2">
+                    <button class="beforePlay beforePlayEvent" value="_2m_live2">◀</button>
+                    <div class="times" id="eventTimes_2m_live2"></div>
+                    <button class="afterPlay afterPlayEvent" value="_2m_live2">▶</button>
+                </td>
+                <td class="_2m _2m_live">
+                    <button class="beforePlay beforePlayEvent" value="_2m_live">◀</button>
+                    <div class="times" id="eventTimes_2m_live"></div>
+                    <button class="afterPlay afterPlayEvent" value="_2m_live">▶</button>
+                </td>
+                <td class="_2m _2m_work">
+                    <button class="beforePlay beforePlayEvent" value="_2m_work">◀</button>
+                    <div class="times" id="eventTimes_2m_work"></div>
+                    <button class="afterPlay afterPlayEvent" value="_2m_work">▶</button>
+                </td>
+                <td class="_4m _4m_live3">
+                    <button class="beforePlay beforePlayEvent" value="_4m_live3">◀</button>
+                    <div class="times" id="eventTimes_4m_live3"></div>
+                    <button class="afterPlay afterPlayEvent" value="_4m_live3">▶</button>
+                </td>
+                <td class="_4m _4m_live2">
+                    <button class="beforePlay beforePlayEvent" value="_4m_live2">◀</button>
+                    <div class="times" id="eventTimes_4m_live2"></div>
+                    <button class="afterPlay afterPlayEvent" value="_4m_live2">▶</button>
+                </td>
+                <td class="_4m _4m_live">
+                    <button class="beforePlay beforePlayEvent" value="_4m_live">◀</button>
+                    <div class="times" id="eventTimes_4m_live"></div>
+                    <button class="afterPlay afterPlayEvent" value="_4m_live">▶</button>
+                </td>
+                <td class="_4m _4m_work">
+                    <button class="beforePlay beforePlayEvent" value="_4m_work">◀</button>
+                    <div class="times" id="eventTimes_4m_work"></div>
+                    <button class="afterPlay afterPlayEvent" value="_4m_work">▶</button>
+                </td>
+                <td class="_6m _6m_live3">
+                    <button class="beforePlay beforePlayEvent" value="_6m_live3">◀</button>
+                    <div class="times" id="eventTimes_6m_live3"></div>
+                    <button class="afterPlay afterPlayEvent" value="_6m_live3">▶</button>
+                </td>
+                <td class="_6m _6m_live2">
+                    <button class="beforePlay beforePlayEvent" value="_6m_live2">◀</button>
+                    <div class="times" id="eventTimes_6m_live2"></div>
+                    <button class="afterPlay afterPlayEvent" value="_6m_live2">▶</button>
+                </td>
+                <td class="_6m _6m_live">
+                    <button class="beforePlay beforePlayEvent" value="_6m_live">◀</button>
+                    <div class="times" id="eventTimes_6m_live"></div>
+                    <button class="afterPlay afterPlayEvent" value="_6m_live">▶</button>
+                </td>
+                <td class="_6m _6m_work">
+                    <button class="beforePlay beforePlayEvent" value="_6m_work">◀</button>
+                    <div class="times" id="eventTimes_6m_work"></div>
+                    <button class="afterPlay afterPlayEvent" value="_6m_work">▶</button>
+                </td>
+                <td class="_mm _mm_live3">
+                    <button class="beforePlay beforePlayEvent" value="_mm_live3">◀</button>
+                    <div class="times" id="eventTimes_mm_live3"></div>
+                    <button class="afterPlay afterPlayEvent" value="_mm_live3">▶</button>
+                </td>
+                <td class="_mm _mm_live2">
+                    <button class="beforePlay beforePlayEvent" value="_mm_live2">◀</button>
+                    <div class="times" id="eventTimes_mm_live2"></div>
+                    <button class="afterPlay afterPlayEvent" value="_mm_live2">▶</button>
+                </td>
+                <td class="_mm _mm_live">
+                    <button class="beforePlay beforePlayEvent" value="_mm_live">◀</button>
+                    <div class="times" id="eventTimes_mm_live"></div>
+                    <button class="afterPlay afterPlayEvent" value="_mm_live">▶</button>
+                </td>
+                <td class="_mm _mm_work">
+                    <button class="beforePlay beforePlayEvent" value="_mm_work">◀</button>
+                    <div class="times" id="eventTimes_mm_work"></div>
+                    <button class="afterPlay afterPlayEvent" value="_mm_work">▶</button>
+                </td>
+            </tr>
+            <tr class="stripe">
+                <td>イベントステージ獲得pt</td>
+                <td class="_2m _2m_live3" id="eventEarnedPoints_2m_live3"></td>
+                <td class="_2m _2m_live2" id="eventEarnedPoints_2m_live2"></td>
+                <td class="_2m _2m_live" id="eventEarnedPoints_2m_live"></td>
+                <td class="_2m _2m_work" id="eventEarnedPoints_2m_work"></td>
+                <td class="_4m _4m_live3" id="eventEarnedPoints_4m_live3"></td>
+                <td class="_4m _4m_live2" id="eventEarnedPoints_4m_live2"></td>
+                <td class="_4m _4m_live" id="eventEarnedPoints_4m_live"></td>
+                <td class="_4m _4m_work" id="eventEarnedPoints_4m_work"></td>
+                <td class="_6m _6m_live3" id="eventEarnedPoints_6m_live3"></td>
+                <td class="_6m _6m_live2" id="eventEarnedPoints_6m_live2"></td>
+                <td class="_6m _6m_live" id="eventEarnedPoints_6m_live"></td>
+                <td class="_6m _6m_work" id="eventEarnedPoints_6m_work"></td>
+                <td class="_mm _mm_live3" id="eventEarnedPoints_mm_live3"></td>
+                <td class="_mm _mm_live2" id="eventEarnedPoints_mm_live2"></td>
+                <td class="_mm _mm_live" id="eventEarnedPoints_mm_live"></td>
+                <td class="_mm _mm_work" id="eventEarnedPoints_mm_work"></td>
+            </tr>
+            <tr>
+                <td>消費元気</td>
+                <td class="_2m _2m_live3" id="consumedStamina_2m_live3"></td>
+                <td class="_2m _2m_live2" id="consumedStamina_2m_live2"></td>
+                <td class="_2m _2m_live" id="consumedStamina_2m_live"></td>
+                <td class="_2m _2m_work" id="consumedStamina_2m_work"></td>
+                <td class="_4m _4m_live3" id="consumedStamina_4m_live3"></td>
+                <td class="_4m _4m_live2" id="consumedStamina_4m_live2"></td>
+                <td class="_4m _4m_live" id="consumedStamina_4m_live"></td>
+                <td class="_4m _4m_work" id="consumedStamina_4m_work"></td>
+                <td class="_6m _6m_live3" id="consumedStamina_6m_live3"></td>
+                <td class="_6m _6m_live2" id="consumedStamina_6m_live2"></td>
+                <td class="_6m _6m_live" id="consumedStamina_6m_live"></td>
+                <td class="_6m _6m_work" id="consumedStamina_6m_work"></td>
+                <td class="_mm _mm_live3" id="consumedStamina_mm_live3"></td>
+                <td class="_mm _mm_live2" id="consumedStamina_mm_live2"></td>
+                <td class="_mm _mm_live" id="consumedStamina_mm_live"></td>
+                <td class="_mm _mm_work" id="consumedStamina_mm_work"></td>
+            </tr>
+            <tr>
+                <td>自然回復日時</td>
+                <td class="_2m _2m_live3" id="naturalRecoveryAt_2m_live3"></td>
+                <td class="_2m _2m_live2" id="naturalRecoveryAt_2m_live2"></td>
+                <td class="_2m _2m_live" id="naturalRecoveryAt_2m_live"></td>
+                <td class="_2m _2m_work" id="naturalRecoveryAt_2m_work"></td>
+                <td class="_4m _4m_live3" id="naturalRecoveryAt_4m_live3"></td>
+                <td class="_4m _4m_live2" id="naturalRecoveryAt_4m_live2"></td>
+                <td class="_4m _4m_live" id="naturalRecoveryAt_4m_live"></td>
+                <td class="_4m _4m_work" id="naturalRecoveryAt_4m_work"></td>
+                <td class="_6m _6m_live3" id="naturalRecoveryAt_6m_live3"></td>
+                <td class="_6m _6m_live2" id="naturalRecoveryAt_6m_live2"></td>
+                <td class="_6m _6m_live" id="naturalRecoveryAt_6m_live"></td>
+                <td class="_6m _6m_work" id="naturalRecoveryAt_6m_work"></td>
+                <td class="_mm _mm_live3" id="naturalRecoveryAt_mm_live3"></td>
+                <td class="_mm _mm_live2" id="naturalRecoveryAt_mm_live2"></td>
+                <td class="_mm _mm_live" id="naturalRecoveryAt_mm_live"></td>
+                <td class="_mm _mm_work" id="naturalRecoveryAt_mm_work"></td>
+            </tr>
+            <tr>
+                <td>要回復元気</td>
+                <td class="_2m _2m_live3" id="requiredRecoveryStamina_2m_live3"></td>
+                <td class="_2m _2m_live2" id="requiredRecoveryStamina_2m_live2"></td>
+                <td class="_2m _2m_live" id="requiredRecoveryStamina_2m_live"></td>
+                <td class="_2m _2m_work" id="requiredRecoveryStamina_2m_work"></td>
+                <td class="_4m _4m_live3" id="requiredRecoveryStamina_4m_live3"></td>
+                <td class="_4m _4m_live2" id="requiredRecoveryStamina_4m_live2"></td>
+                <td class="_4m _4m_live" id="requiredRecoveryStamina_4m_live"></td>
+                <td class="_4m _4m_work" id="requiredRecoveryStamina_4m_work"></td>
+                <td class="_6m _6m_live3" id="requiredRecoveryStamina_6m_live3"></td>
+                <td class="_6m _6m_live2" id="requiredRecoveryStamina_6m_live2"></td>
+                <td class="_6m _6m_live" id="requiredRecoveryStamina_6m_live"></td>
+                <td class="_6m _6m_work" id="requiredRecoveryStamina_6m_work"></td>
+                <td class="_mm _mm_live3" id="requiredRecoveryStamina_mm_live3"></td>
+                <td class="_mm _mm_live2" id="requiredRecoveryStamina_mm_live2"></td>
+                <td class="_mm _mm_live" id="requiredRecoveryStamina_mm_live"></td>
+                <td class="_mm _mm_work" id="requiredRecoveryStamina_mm_work"></td>
+            </tr>
+            <tr>
+                <td>所要時間</td>
+                <td class="_2m _2m_live3" id="requiredTime_2m_live3"></td>
+                <td class="_2m _2m_live2" id="requiredTime_2m_live2"></td>
+                <td class="_2m _2m_live" id="requiredTime_2m_live"></td>
+                <td class="_2m _2m_work" id="requiredTime_2m_work"></td>
+                <td class="_4m _4m_live3" id="requiredTime_4m_live3"></td>
+                <td class="_4m _4m_live2" id="requiredTime_4m_live2"></td>
+                <td class="_4m _4m_live" id="requiredTime_4m_live"></td>
+                <td class="_4m _4m_work" id="requiredTime_4m_work"></td>
+                <td class="_6m _6m_live3" id="requiredTime_6m_live3"></td>
+                <td class="_6m _6m_live2" id="requiredTime_6m_live2"></td>
+                <td class="_6m _6m_live" id="requiredTime_6m_live"></td>
+                <td class="_6m _6m_work" id="requiredTime_6m_work"></td>
+                <td class="_mm _mm_live3" id="requiredTime_mm_live3"></td>
+                <td class="_mm _mm_live2" id="requiredTime_mm_live2"></td>
+                <td class="_mm _mm_live" id="requiredTime_mm_live"></td>
+                <td class="_mm _mm_work" id="requiredTime_mm_work"></td>
+            </tr>
+        </table>
+        <div>
+            <button id="update">更新</button> <button id="save">保存</button>
+            <label for="autoSave"> <input type="checkbox" id="autoSave" /> 自動保存 </label>
+        </div>
+        <div>【保存日時】 <span id="datetimeSave"> 未保存 </span></div>
+        <div>
+            <button id="clearInput">入力を初期化</button> <button id="loadSave" disabled>保存した値を読込</button>
+            <button id="clearSave" disabled>保存した値を削除</button>
+        </div>
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+            integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+        ></script>
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.10.6/dayjs.min.js"
+            integrity="sha512-bwD3VD/j6ypSSnyjuaURidZksoVx3L1RPvTkleC48SbHCZsemT3VKMD39KknPnH728LLXVMTisESIBOAb5/W0Q=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+        ></script>
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.10.6/locale/ja.min.js"
+            integrity="sha512-Wnlqvn3V+CPGlJmU+hUsxrDp3S4KKIF7eqlYbPOtAipIOQRHTjk1oZuXvRfaFOZhGmw6leo/V5SqES583KTUDg=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+        ></script>
+        <script src="src/script.js" type="text/javascript"></script>
+    </body>
+</html>
