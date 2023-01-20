@@ -99,6 +99,7 @@
 
         if ($('#isNow').prop('checked')) {
             $('#now').val(dayjs().format('YYYY-MM-DDTHH:mm'));
+            formValue.isNow = true;
         }
 
         function validDateTime(field) {
@@ -157,6 +158,7 @@
         }
         validSafeInteger('target');
         validSafeInteger('stamina');
+        validSafeInteger('maxStamina');
         validSafeInteger('myPoint');
         validSafeInteger('gauge');
         validSafeInteger('mission');
@@ -433,6 +435,7 @@
             now: $('#now').val(),
             isNow: $('#isNow').prop('checked'),
             stamina: $('#stamina').val(),
+            maxStamina: $('#maxStamina').val(),
             myPoint: $('#myPoint').val(),
             gauge: $('#gauge').val(),
             mission: $('#mission').val(),
@@ -473,12 +476,42 @@
         }
     }
 
+    // 元気の自動回復
+    const maxCountDown = 5 * 60;
+    let recoveryTimer = null;
+    function setRecoveryTimer(formValue) {
+        if (!formValue.isNow) {
+            $('#staminaTimer').text('');
+            clearInterval(recoveryTimer);
+            recoveryTimer = null;
+        } else if (formValue.stamina >= formValue.maxStamina) {
+            $('#staminaTimer').text('MAX');
+            clearInterval(recoveryTimer);
+            recoveryTimer = null;
+        } else if (!recoveryTimer) {
+            let count = maxCountDown;
+            recoveryTimer = setInterval(() => {
+                count--;
+                if (count) {
+                    $('#staminaTimer').text(`あと ${Math.floor(count / 60)}分${count % 60}秒`);
+                } else {
+                    count = maxCountDown;
+                    $('#staminaTimer').text(`あと ${Math.floor(count / 60)}分${count % 60}秒`);
+                    const formValue2 = getFormValue();
+                    $('#stamina').val(formValue2.stamina + 1);
+                    calculate();
+                }
+            }, 1000);
+        }
+    }
+
     function calculate() {
         const formValue = getFormValue();
         calculateTargetPoint(formValue);
         calculateSpStage(formValue);
         calculateTime(formValue);
         toggleDisabledButton(formValue);
+        setRecoveryTimer(formValue);
         if (formValue.isAutoSave) {
             save();
         }
@@ -498,6 +531,7 @@
     });
     $('#isNow').change(calculate);
     $('#stamina').change(calculate);
+    $('#maxStamina').change(calculate);
     $('#myPoint').change(calculate);
     $('#gauge').change(calculate);
     $('#mission').change(calculate);
@@ -613,6 +647,7 @@
         $('#now').val(dayjs().format('YYYY-MM-DDTHH:mm'));
         $('#isNow').prop('checked', true);
         $('#stamina').val(0);
+        $('#maxStamina').val(120);
         $('#myPoint').val(0);
         $('#gauge').val(0);
         $('#mission').val(30);
@@ -653,6 +688,7 @@
         $('#now').val(savedData.now);
         $('#isNow').prop('checked', savedData.isNow);
         $('#stamina').val(savedData.stamina);
+        $('#maxStamina').val(savedData.maxStamina);
         $('#myPoint').val(savedData.myPoint);
         $('#gauge').val(savedData.gauge);
         $('#mission').val(savedData.mission);
